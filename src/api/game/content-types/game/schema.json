@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "games",
+  "info": {
+    "singularName": "game",
+    "pluralName": "games",
+    "displayName": "Game"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "maxLength": 250,
+      "required": true,
+      "unique": true
+    },
+    "consoles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::console.console",
+      "inversedBy": "games"
+    },
+    "genres": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::genre.genre",
+      "inversedBy": "games"
+    },
+    "releaseDate": {
+      "type": "date"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "inventory_items": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::inventory-item.inventory-item",
+      "mappedBy": "game"
+    }
+  }
+}
