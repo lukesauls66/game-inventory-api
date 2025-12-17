@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "inventory_items",
+  "info": {
+    "singularName": "inventory-item",
+    "pluralName": "inventory-items",
+    "displayName": "InventoryItem"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "game": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::game.game",
+      "inversedBy": "inventory_items"
+    },
+    "console": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::console.console",
+      "inversedBy": "inventory_items"
+    },
+    "quantity": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "sku": {
+      "type": "string",
+      "unique": true
+    },
+    "available": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  }
+}

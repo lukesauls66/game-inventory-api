@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "genres",
+  "info": {
+    "singularName": "genre",
+    "pluralName": "genres",
+    "displayName": "Genre"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "enumeration",
+      "enum": [
+        "Action",
+        "Action-adventure",
+        "Adventure",
+        "Arcade",
+        "Card game",
+        "Fantasy",
+        "Fighting",
+        "Horror",
+        "MMO",
+        "Open world",
+        "Party",
+        "Platformer",
+        "Puzzle",
+        "Racing",
+        "Rhythm",
+        "Roguelike",
+        "RPG",
+        "Sandbox",
+        "Shooter",
+        "Strategy",
+        "Survival"
+      ]
+    },
+    "games": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::game.game",
+      "mappedBy": "genres"
+    }
+  }
+}
