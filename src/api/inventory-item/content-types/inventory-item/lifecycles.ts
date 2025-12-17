@@ -2,6 +2,26 @@ import { errors } from "@strapi/utils";
 
 const { ValidationError } = errors;
 
+interface InventoryItemData {
+  game: { connect: { id: number; name?: string }[] };
+  console: { connect: { id: number; name?: string }[] };
+  quantity: number;
+  price: number;
+  available: boolean;
+  sku?: string;
+}
+
+interface InventoryItemLifecycleEvent {
+  params: {
+    data: InventoryItemData;
+  };
+}
+
+interface GameWithConsoles {
+  title: string;
+  consoles?: { id: number; name: string }[];
+}
+
 export default {
   async beforeCreate(event) {
     await validateGameConsoleRelation(event);
@@ -12,7 +32,7 @@ export default {
   },
 };
 
-async function validateGameConsoleRelation(event: any) {
+async function validateGameConsoleRelation(event: InventoryItemLifecycleEvent) {
   const { data } = event.params;
 
   if (!data.game || !data.console) return;
@@ -24,15 +44,22 @@ async function validateGameConsoleRelation(event: any) {
 
   const game = (await strapi.entityService.findOne("api::game.game", gameId, {
     populate: ["consoles"],
-  })) as {
-    consoles?: { id: number }[];
-  };
+  })) as GameWithConsoles;
 
-  const allowedConsoleIds = game.consoles.map((console: any) => console.id);
+  const allowedConsoleIds = game.consoles.map(
+    (console: { id: number }) => console.id
+  );
+
+  const selectedConsole = await strapi.entityService.findOne(
+    "api::console.console",
+    consoleId
+  );
+
+  const selectedConsoleName = selectedConsole?.name || "selected console";
 
   if (!allowedConsoleIds.includes(consoleId)) {
     throw new ValidationError(
-      "This game is not available on the selected console."
+      `${game.title} is not available on ${selectedConsoleName}.`
     );
   }
 }
